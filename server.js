@@ -5,7 +5,7 @@ const app = express()
 
 app.use(express.json())
 
-app.use("/posts", require("./routes/postRoutes"))
+app.use("/api", require("./routes/api-routes")) 
 
 app.use( (err, req, res, next ) => {
 
