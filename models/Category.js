@@ -1,4 +1,5 @@
-const db = require("../config/Database")
+const mssql = require("mssql")
+const database = require("../config/Database")
 
 class Category {
 
@@ -8,21 +9,20 @@ class Category {
     }
 
     async save () {
-        let sql = `
-        INSERT INTO categories (
-            description,
-            model_name
-        ) VALUES (
-            '${this.description}',
-            '${this.model_name}'
-        )
-        `
-        const [newCategory, _] = await db.execute(sql)
+        const dbpool = await mssql.connect(database)
+        const result = await dbpool.request()
+        .input("description", mssql.NVarChar , this.description)
+        .input("model_name", mssql.NVarChar , this.model_name)
+        .execute("sp_categories")      
 
-        return newCategory
+        if (result.recordset) {
+            return result.recordset
+        } else {
+            return 'done'
+        }
     }
 
-    static findAll() {
+    static findAll() { 
 
     }
 }

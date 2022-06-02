@@ -1,11 +1,18 @@
 require("dotenv").config()
 
 const express = require("express")
-const app = express()
+const cors = require("cors")
 
+const app = express()
 app.use(express.json())
 
-app.use("/api", require("./routes/api-routes")) 
+const corsOptions = {
+    origin: "*"
+}
+
+app.use(cors(corsOptions))
+
+app.use("/api", require("./routes/api-routes"))
 
 app.use( (err, req, res, next ) => {
 
